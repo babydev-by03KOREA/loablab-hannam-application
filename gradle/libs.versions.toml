@@ -1,21 +1,23 @@
 [versions]
 agp = "8.11.2"
-datastore = "1.2.0-alpha02"
+datastore = "1.1.1"                  # 안정판 추천
 kotlin = "2.0.21"
 coreKtx = "1.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-kotlinxSerializationJson = "1.9.0"
+kotlinxSerializationJson = "1.7.3"   # ⬅️ 2.0.x 호환 최신 안정판
 lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.8.0"
 composeBom = "2024.09.00"
-lifecycleViewmodel = "2.10.0-alpha03"
+lifecycleViewmodel = "2.7.0"         # alpha 말고 안정판
+navigationCompose = "2.8.0"          # 2.9.x 알파 대신 안정판
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodel" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

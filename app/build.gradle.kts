@@ -63,4 +63,6 @@ dependencies {
     implementation(libs.androidx.datastore)
     // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-viewmodel-compose
     implementation(libs.androidx.lifecycle.viewmodel)
+    // https://mvnrepository.com/artifact/androidx.navigation/navigation-compose
+    implementation(libs.androidx.navigation.compose)
 }

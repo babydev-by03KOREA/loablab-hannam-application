@@ -8,6 +8,7 @@ import com.loab.hannam.data.model.SurveyState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
@@ -19,14 +20,19 @@ import java.io.OutputStream
  * */
 object SurveyStateSerializer : Serializer<SurveyState> {
     override val defaultValue: SurveyState = SurveyState()
+
     override suspend fun readFrom(input: InputStream): SurveyState = try {
-        Json.decodeFromString<SurveyState>(input.readBytes().decodeToString())
+        Json.decodeFromString<SurveyState>(
+            input.readBytes().decodeToString()
+        )
     } catch (_: SerializationException) {
         defaultValue
     }
 
     override suspend fun writeTo(t: SurveyState, output: OutputStream) {
-        output.write(Json.encodeToString(t).encodeToByteArray())
+        output.write(
+            Json.encodeToString<SurveyState>(t).encodeToByteArray()
+        )
     }
 }
 

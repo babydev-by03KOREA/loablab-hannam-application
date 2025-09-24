@@ -8,23 +8,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.loab.hannam.data.repository.SurveyRepositoryImpl
 import com.loab.hannam.data.store.SurveyLocalStore
 import com.loab.hannam.ui.SurveyViewModel
-import com.loab.hannam.ui.screen.result.ResultActions
 import com.loab.hannam.ui.theme.LOABLABHannamApplicationTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.loab.hannam.ui.screen.navigation.AppNavHost
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Repo 준비 (Context 기반)
-        val repo = SurveyRepositoryImpl(SurveyLocalStore(applicationContext))
-        val factory = SurveyViewModelFactory(repo)
-
-
         setContent {
             LOABLABHannamApplicationTheme {
-                val vm: SurveyViewModel = viewModel(factory = factory)
-                ResultActions(vm = vm)
+                val navController = rememberNavController()
+
+                val repo = SurveyRepositoryImpl(SurveyLocalStore(applicationContext))
+                val vm: SurveyViewModel = viewModel(factory = SurveyViewModelFactory(repo))
+
+                AppNavHost(navController = navController, vm = vm)
             }
         }
     }
