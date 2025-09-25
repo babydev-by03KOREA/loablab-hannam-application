@@ -1,2 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">LOABLAB Hannam 应用程序</string>
+
+    <string name="save_image">保存</string>
+    <string name="saved_success">图片已成功保存！</string>
+    <string name="saved_fail">图片保存失败。</string>
+
+    <string name="start">开始</string>
+
+    <string name="customer_info">客户信息</string>
+    <string name="customer_name">姓名</string>
+
+    <string name="thank_you_message">
+        感谢您光临 Loab Hannam。\n
+        我们用心准备，期望这里的每一刻\n
+        都能成为您特别的体验。\n
+        愿这段用心营造的时光，\n
+        成为您长久珍藏的美好回忆。\n
+        请在 Loab Hannam 尽情享受幸福时光。
+    </string>
+
+    <string name="hair_condition_check_list">发质状况检查表</string>
+    <string name="hair_treatment_consultation">美发施术咨询</string>
+
+    <!--  PAGE 4  -->
+    <string name="last_treatment_details">请填写您上次施术的所有内容。</string>
+    <string name="last_treatment_uncomfortable">如果上次施术有任何不适，请填写。</string>
+    <string name="last_treatment_concerned">请填写您目前发型中困扰的地方。</string>
+
+    <!--  PAGE 5  -->
+    <string name="last_treatment_requested">
+        在施术时是否有任何要求或需要注意的事项？\n
+        （如过敏、头皮状况等）
+    </string>
+
+    <string name="most_important_hairstyle">在发型中您最重视的部分是什么？</string>
+    <string name="most_important_hairstyle_option_natural">自然风干</string>
+    <string name="most_important_hairstyle_option_dry">吹风造型</string>
+    <string name="most_important_hairstyle_option_rolldry">卷梳吹整</string>
+
+    <string name="styling_level">您的造型习惯程度如何？</string>
+    <string name="styling_level_option_use_device">使用造型工具（卷发棒、Airwrap 等）</string>
+    <string name="styling_level_option_use_everyday">每天使用</string>
+    <string name="styling_level_option_use_week">每周</string>
+    <string name="styling_level_option_use_times">次 使用</string>
+
+    <!--  PAGE 6  -->
+    <string name="choose_usual_style_image">请选择符合您平常风格与形象的选项。</string>
+    <string name="max_three">（最多可选 3 项）</string>
+    <string name="style_standard">标准</string>
+    <string name="style_soft">柔和</string>
+    <string name="style_boyish">中性</string>
+    <string name="style_light">轻盈</string>
+    <string name="style_casual">休闲</string>
+    <string name="style_cute">可爱</string>
+    <string name="style_pro">专业</string>
+    <string name="style_flashy">华丽</string>
+    <string name="style_trendy">流行</string>
+    <string name="style_clean">利落</string>
+    <string name="style_unique">独特</string>
+    <string name="style_simple">简约</string>
+    <string name="style_modern">现代</string>
+    <string name="style_chic">时尚</string>
+    <string name="style_vintage">复古</string>
+    <string name="style_noeffort">随性（自然）</string>
+
+    <!--  PAGE 7  -->
+    <string name="layer">层次程度</string>
+    <string name="thick_layer">发量</string>
+    <string name="many">多</string>
+    <string name="less">少</string>
+    <string name="today_want_today">今天想要的设计</string>
+
+    <!--  PAGE 8  -->
+    <string name="shape_your_face">您认为自己的脸型是？</string>
+    <string name="treatment_consultation_paper">正在生成施术咨询表...</string>
+
+    <!--  PAGE 10  -->
+    <string name="thankyou_for_your_time">感谢您的宝贵时间。</string>
+</resources>

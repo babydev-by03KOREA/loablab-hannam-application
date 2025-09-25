@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,10 +32,10 @@ fun PrevNextBar(
             .navigationBarsPadding()
             .padding(horizontal = 24.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         if (prevRoute != null) {
-            OutlinedButton(
+            TextButton (
                 onClick = { navController.navigate(prevRoute) { launchSingleTop = true } }
             ) { Text("Previous") }
         } else {
@@ -42,7 +43,7 @@ fun PrevNextBar(
         }
 
         if (nextRoute != null) {
-            Button(
+            TextButton(
                 enabled = nextEnabled,
                 onClick = {
                     val go = onBeforeNavigateNext?.invoke() ?: true

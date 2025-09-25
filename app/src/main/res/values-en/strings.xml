@@ -1,2 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">LOABLAB Hannam Application</string>
+
+    <string name="save_image">Save</string>
+    <string name="saved_success">Image saved successfully!</string>
+    <string name="saved_fail">Failed to save image.</string>
+
+    <string name="start">START</string>
+
+    <string name="customer_info">CUSTOMER INFO</string>
+    <string name="customer_name">NAME</string>
+
+    <string name="thank_you_message">
+        Thank you for visiting Loab Hannam.\n
+        We have prepared with utmost care so that every moment here\n
+        becomes a special experience for you.\n
+        May this time, created with thoughtful consideration,\n
+        remain a precious memory for you for a long time.\n
+        Please enjoy your happy moments at Loab Hannam.
+    </string>
+
+    <string name="hair_condition_check_list">HAIR CONDITION CHECK LIST</string>
+    <string name="hair_treatment_consultation">Hair Treatment Consultation</string>
+
+    <!--  PAGE 4  -->
+    <string name="last_treatment_details">Please provide details of your last treatment.</string>
+    <string name="last_treatment_uncomfortable">If there was anything uncomfortable during your previous treatment, please describe it.</string>
+    <string name="last_treatment_concerned">Please write down the concerns you have with your current style.</string>
+
+    <!--  PAGE 5  -->
+    <string name="last_treatment_requested">
+        Do you have any requests or precautions for this treatment?\n
+        (e.g. allergies, scalp condition, etc.)
+    </string>
+
+    <string name="most_important_hairstyle">What is the most important aspect of your hairstyle?</string>
+    <string name="most_important_hairstyle_option_natural">Natural Dry</string>
+    <string name="most_important_hairstyle_option_dry">Blow Dry</string>
+    <string name="most_important_hairstyle_option_rolldry">Roll Dry</string>
+
+    <string name="styling_level">How would you describe your styling level?</string>
+    <string name="styling_level_option_use_device">Use of devices (iron, Airwrap, etc.)</string>
+    <string name="styling_level_option_use_everyday">Every day</string>
+    <string name="styling_level_option_use_week">Per week</string>
+    <string name="styling_level_option_use_times">Times used</string>
+
+    <!--  PAGE 6  -->
+    <string name="choose_usual_style_image">Please select the style/image that best represents you.</string>
+    <string name="max_three">(Up to 3 selections)</string>
+    <string name="style_standard">Standard</string>
+    <string name="style_soft">Soft</string>
+    <string name="style_boyish">Boyish</string>
+    <string name="style_light">Light</string>
+    <string name="style_casual">Casual</string>
+    <string name="style_cute">Cute</string>
+    <string name="style_pro">Professional</string>
+    <string name="style_flashy">Flashy</string>
+    <string name="style_trendy">Trendy</string>
+    <string name="style_clean">Neat</string>
+    <string name="style_unique">Unique</string>
+    <string name="style_simple">Simple</string>
+    <string name="style_modern">Modern</string>
+    <string name="style_chic">Chic</string>
+    <string name="style_vintage">Vintage</string>
+    <string name="style_noeffort">Effortless</string>
+
+    <!--  PAGE 7  -->
+    <string name="layer">Layer Amount</string>
+    <string name="thick_layer">Thickness</string>
+    <string name="many">Thick</string>
+    <string name="less">Thin</string>
+    <string name="today_want_today">Design you want today</string>
+
+    <!--  PAGE 8  -->
+    <string name="shape_your_face">What do you think your face shape is?</string>
+    <string name="treatment_consultation_paper">Generating treatment consultation form...</string>
+
+    <!--  PAGE 10  -->
+    <string name="thankyou_for_your_time">Thank you for your precious time.</string>
+</resources>

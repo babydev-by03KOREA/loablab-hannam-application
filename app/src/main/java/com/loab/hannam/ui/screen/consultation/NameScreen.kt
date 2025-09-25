@@ -1,5 +1,7 @@
 package com.loab.hannam.ui.screen.consultation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,9 +21,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.loab.hannam.R
@@ -42,27 +47,34 @@ fun NameScreenContent(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = stringResource(R.string.enter_name),
+            text = stringResource(R.string.customer_info),
+            fontSize = 40.sp,
             style = MaterialTheme.typography.titleLarge
         )
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(100.dp))
+
+        Text(
+            text = stringResource(R.string.customer_name),
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Spacer(Modifier.height(20.dp))
 
         OutlinedTextField(
             value = name,
             onValueChange = onNameChange,
-            label = { Text(text = stringResource(R.string.name)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.LightGray, // 비포커스 배경 색상
+                focusedContainerColor = Color.LightGray,   // 포커스 배경 색상
+                unfocusedIndicatorColor = Color.Transparent, // 비포커스 테두리 제거
+                focusedIndicatorColor = Color.Transparent    // 포커스 테두리 제거
+            )
         )
 
         Spacer(Modifier.height(24.dp))
 
-        Button(
-            onClick = onNextClick,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = stringResource(R.string.next))
-        }
+
     }
 }
 

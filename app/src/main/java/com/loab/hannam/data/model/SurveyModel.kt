@@ -16,9 +16,15 @@ data class CustomerInfo(
 
 @Serializable
 data class HairChecklist(
-    val lastServices: String = "",          // "컷(Y/M) 펌(Y/M) …"
-    val previousIssues: String = "",
+    val lastCut: Boolean? = null,
+    val lastPerm: Boolean? = null,
+    val lastColor: Boolean? = null,
+    val lastBleach: Boolean? = null,
+
+//    val lastTreatmentDetails: String = "",
+    val lastTreatmentUncomfortable: String = "",
     val currentConcerns: String = "",
+
     val precautions: String = "",           // 알러지/두피상태 등
     val importantInStyle: List<String> = emptyList(),  // 자연건조/드라이…
     val stylingLevel: List<String> = emptyList(),      // 기기사용/매일사용…

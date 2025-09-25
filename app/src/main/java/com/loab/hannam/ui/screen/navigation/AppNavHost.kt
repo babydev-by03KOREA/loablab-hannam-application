@@ -30,9 +30,5 @@ fun AppNavHost(
         composable(Screen.Start.route) {
             NameScreen(vm = vm, navController = navController)
         }
-//        // 추가 예정
-//        composable(Screen.Result.route) {
-//            ResultScreen(vm = vm)
-//        }
     }
 }

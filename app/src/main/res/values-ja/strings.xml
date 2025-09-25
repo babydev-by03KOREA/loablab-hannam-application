@@ -1,2 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">LOABLAB Hannam アプリケーション</string>
+
+    <string name="save_image">保存する</string>
+    <string name="saved_success">画像を保存しました！</string>
+    <string name="saved_fail">画像の保存に失敗しました。</string>
+
+    <string name="start">スタート</string>
+
+    <string name="customer_info">お客様情報</string>
+    <string name="customer_name">お名前</string>
+
+    <string name="thank_you_message">
+        Loab Hannam にお越しいただき誠にありがとうございます。\n
+        ここでのひとときが特別な体験となるよう、\n
+        心を込めてご用意いたしました。\n
+        丁寧なおもてなしの中で過ごす時間が、\n
+        お客様にとって大切な思い出として残りますように。\n
+        Loab Hannam で幸せな時間をお楽しみください。
+    </string>
+
+    <string name="hair_condition_check_list">ヘアコンディション チェックリスト</string>
+    <string name="hair_treatment_consultation">ヘア施術カウンセリング</string>
+
+    <!--  PAGE 4  -->
+    <string name="last_treatment_details">前回の施術内容をすべてご記入ください。</string>
+    <string name="last_treatment_uncomfortable">前回の施術で不快に感じた点があればご記入ください。</string>
+    <string name="last_treatment_concerned">現在のスタイルで気になる点をご記入ください。</string>
+
+    <!--  PAGE 5  -->
+    <string name="last_treatment_requested">
+        施術時にご要望や注意点はありますか？\n
+        （アレルギー、頭皮の状態など）
+    </string>
+
+    <string name="most_important_hairstyle">ヘアスタイルで最も重視する点は何ですか？</string>
+    <string name="most_important_hairstyle_option_natural">自然乾燥</string>
+    <string name="most_important_hairstyle_option_dry">ブロードライ</string>
+    <string name="most_important_hairstyle_option_rolldry">ロールドライ</string>
+
+    <string name="styling_level">スタイリングレベルはどの程度ですか？</string>
+    <string name="styling_level_option_use_device">機器使用（アイロン、エアラップなど）</string>
+    <string name="styling_level_option_use_everyday">毎日使用</string>
+    <string name="styling_level_option_use_week">週</string>
+    <string name="styling_level_option_use_times">回 使用</string>
+
+    <!--  PAGE 6  -->
+    <string name="choose_usual_style_image">普段のスタイルやイメージをお選びください。</string>
+    <string name="max_three">（最大3つまで選択可能）</string>
+    <string name="style_standard">スタンダード</string>
+    <string name="style_soft">ソフト</string>
+    <string name="style_boyish">ボーイッシュ</string>
+    <string name="style_light">ライト</string>
+    <string name="style_casual">カジュアル</string>
+    <string name="style_cute">キュート</string>
+    <string name="style_pro">プロフェッショナル</string>
+    <string name="style_flashy">華やか</string>
+    <string name="style_trendy">トレンディ</string>
+    <string name="style_clean">クリーン</string>
+    <string name="style_unique">ユニーク</string>
+    <string name="style_simple">シンプル</string>
+    <string name="style_modern">モダン</string>
+    <string name="style_chic">シック</string>
+    <string name="style_vintage">ヴィンテージ</string>
+    <string name="style_noeffort">抜け感（ナチュラル）</string>
+
+    <!--  PAGE 7  -->
+    <string name="layer">レイヤーの程度</string>
+    <string name="thick_layer">毛量</string>
+    <string name="many">多い</string>
+    <string name="less">少ない</string>
+    <string name="today_want_today">本日ご希望のデザイン</string>
+
+    <!--  PAGE 8  -->
+    <string name="shape_your_face">ご自身で考える顔の形</string>
+    <string name="treatment_consultation_paper">カウンセリングシートを作成中...</string>
+
+    <!--  PAGE 10  -->
+    <string name="thankyou_for_your_time">お時間をいただき、ありがとうございました。</string>
+</resources>

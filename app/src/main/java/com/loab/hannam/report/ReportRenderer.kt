@@ -45,8 +45,11 @@ object ReportRenderer {
         fun bullet(label: String, value: String) {
             y += 24; drawRow(canvas, label, value, 64f, y, textPaint); y += 56
         }
-        bullet("Last Services", state.hair.lastServices)
-        bullet("Previous Issues", state.hair.previousIssues)
+        bullet("Last Services Hair Cut", boolToText(state.hair.lastCut))
+        bullet("Last Services Perm", boolToText(state.hair.lastPerm))
+        bullet("Last Services Color", boolToText(state.hair.lastColor))
+        bullet("Last Services Bleach", boolToText(state.hair.lastBleach))
+        bullet("Previous Issues", state.hair.lastTreatmentUncomfortable)
         bullet("Concerns", state.hair.currentConcerns)
         bullet("Precautions", state.hair.precautions)
         bullet("Important", state.hair.importantInStyle.joinToString(", "))
@@ -60,6 +63,14 @@ object ReportRenderer {
         // 간단한 워터마크
         canvas.drawRect(Rect(0, (height * 0.75f).toInt(), width, height), gray.apply { alpha = 30 })
         return bmp
+    }
+
+    private fun boolToText(value: Boolean?): String {
+        return when (value) {
+            true -> "Y"
+            false -> "N"
+            null -> "M"   // M = 미입력 (혹은 공백 "" 처리해도 됨)
+        }
     }
 
     private fun drawRow(

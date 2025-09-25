@@ -5,6 +5,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -22,6 +23,7 @@ fun LangChip(
     ) {
         Text(
             text = text,
+            color = Color.Black,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
         )
     }
