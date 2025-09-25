@@ -40,6 +40,20 @@ class SurveyViewModel(
         viewModelScope.launch { repo.save(_uiState.value) }
     }
 
+    /** 단계 진행 전에 현재 상태를 저장 (선택) */
+    fun persistStep() {
+        viewModelScope.launch {
+            repo.save(_uiState.value)
+        }
+    }
+
+    /** Concern(고민) 단계 유효성 검사 예시 */
+    fun validateConcern(): Boolean =
+        _uiState.value.hair.currentConcerns.isNotBlank()
+
+    /** Concern 단계에서 Next 버튼 활성화 여부 */
+    fun canProceedFromConcern(): Boolean = validateConcern()
+
     private fun mutate(change: (SurveyState) -> SurveyState) {
         _uiState.update(change)
 
