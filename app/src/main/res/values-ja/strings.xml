@@ -46,8 +46,10 @@
     <string name="styling_level_option_use_times">回 使用</string>
 
     <!--  PAGE 6  -->
-    <string name="choose_usual_style_image">普段のスタイルやイメージをお選びください。</string>
-    <string name="max_three">（最大3つまで選択可能）</string>
+    <string name="choose_usual_style_image">
+        普段のスタイルやイメージをお選びください。\n
+        （最大3つまで選択可能）
+    </string>
     <string name="style_standard">スタンダード</string>
     <string name="style_soft">ソフト</string>
     <string name="style_boyish">ボーイッシュ</string>

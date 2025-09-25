@@ -45,8 +45,10 @@
     <string name="styling_level_option_use_times">회 사용</string>
 
     <!--  PAGE 6  -->
-    <string name="choose_usual_style_image">평소 내 스타일과 이미지를 선택해주세요.</string>
-    <string name="max_three">(최대 3개까지 선택)</string>
+    <string name="choose_usual_style_image">
+        평소 내 스타일과 이미지를 선택해주세요. \n
+        (최대 3개까지 선택)
+    </string>
     <string name="style_standard">스탠다드</string>
     <string name="style_soft">부드러운</string>
     <string name="style_boyish">보이쉬한</string>

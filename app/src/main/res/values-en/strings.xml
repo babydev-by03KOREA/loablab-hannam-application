@@ -46,8 +46,10 @@
     <string name="styling_level_option_use_times">Times used</string>
 
     <!--  PAGE 6  -->
-    <string name="choose_usual_style_image">Please select the style/image that best represents you.</string>
-    <string name="max_three">(Up to 3 selections)</string>
+    <string name="choose_usual_style_image">
+        Please select the style/image that best represents you. \n
+        (Up to 3 selections)
+    </string>
     <string name="style_standard">Standard</string>
     <string name="style_soft">Soft</string>
     <string name="style_boyish">Boyish</string>

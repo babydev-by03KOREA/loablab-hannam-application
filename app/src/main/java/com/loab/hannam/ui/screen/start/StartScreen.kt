@@ -111,13 +111,8 @@ fun StartScreenContent(
             PrevNextBar(
                 navController = navController,
                 prevRoute = Screen.Intro.route,
-                nextRoute = Screen.Concern.route,
-                nextEnabled = listOf(
-                    state.hair.lastCut,
-                    state.hair.lastPerm,
-                    state.hair.lastColor,
-                    state.hair.lastBleach
-                ).any { it != null },  // 네 개 중 하나라도 선택되면 활성화
+                nextRoute = Screen.HairConsult.route,
+                nextEnabled = true,
                 onBeforeNavigateNext = {
                     vm.persistStep()
                     true

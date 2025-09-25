@@ -94,7 +94,9 @@ fun IntroScreen(
         currentLang = state.customer.localeTag,          // "ko" / "zh" / "en" / "ja"
         onSelectLang = { lang -> vm.setLocale(lang) },   // ViewModel에 언어 변경 위임
         onStart = {                                      // 다음 화면으로 이동
-            navController.navigate(Screen.History.route) // 프로젝트의 실제 라우트로 교체
+            navController.navigate(Screen.Start.route) {
+                launchSingleTop = true
+            }
         }
     )
 }

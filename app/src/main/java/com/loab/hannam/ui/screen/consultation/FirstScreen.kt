@@ -1,12 +1,16 @@
 package com.loab.hannam.ui.screen.consultation
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,16 +62,18 @@ private fun LabeledTextField(
     value: String,
     onChange: (String) -> Unit,
     placeholder: String = "",
-    modifier: Modifier = Modifier
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = label, style = MaterialTheme.typography.titleMedium)
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(
             value = value,
             onValueChange = onChange,
             placeholder = { if (placeholder.isNotBlank()) Text(placeholder) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray),
             minLines = 3
         )
     }
@@ -75,7 +81,7 @@ private fun LabeledTextField(
 
 /** 페이지 본문 */
 @Composable
-fun HairConsultPage(
+fun FirstScreen(
     vm: SurveyViewModel,
     navController: NavController
 ) {
@@ -87,118 +93,121 @@ fun HairConsultPage(
     var lastColor by remember { mutableStateOf<Boolean?>(null) }
     var lastBleach by remember { mutableStateOf<Boolean?>(null) }
 
-    var details by remember { mutableStateOf("") }
     var uncomfortable by remember { mutableStateOf("") }
     var concerns by remember { mutableStateOf("") }
 
     val scrollState = rememberScrollState()
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .navigationBarsPadding()
-            .padding(horizontal = 20.dp)
-    ) {
-        Column(
+    Scaffold(
+        bottomBar = {
+            // 하단 Prev / Next 바
+            PrevNextBar(
+                navController = navController,
+                prevRoute = Screen.Intro.route,
+                nextRoute = Screen.Second.route,
+                nextEnabled = listOf(lastCut, lastPerm, lastColor, lastBleach).any { it != null },
+                onBeforeNavigateNext = {
+                    vm.updateHair { hair ->
+                        hair.copy(
+                            lastCut = lastCut,
+                            lastPerm = lastPerm,
+                            lastColor = lastColor,
+                            lastBleach = lastBleach
+                        )
+                    }
+                    vm.persistStep()
+                    true
+                }
+            )
+        }
+    ) { paddingValues ->
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .padding(horizontal = 24.dp, vertical = 24.dp)
+                .padding(paddingValues)
         ) {
-            // 상단 언어 선택 (있다면)
-            LangBar(
-                currentLang = state.customer.localeTag,
-                onSelectLang = { vm.setLocale(it) }
-            )
-
-            // 타이틀
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
-                Text(
-                    text = stringResource(R.string.hair_condition_check_list),
-                    style = MaterialTheme.typography.headlineSmall,
-                    textAlign = TextAlign.Center
+                LangBar(
+                    currentLang = state.customer.localeTag,
+                    onSelectLang = { vm.setLocale(it) }
                 )
-                Text(
-                    text = stringResource(R.string.hair_treatment_consultation),
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
 
-            // ---- 컷/펌/컬러/탈색: 개별 Y/N ----
-            Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                YesNoRow(
-                    label = "컷 (Y/N)",
-                    value = lastCut,
-                    onChange = { lastCut = it }
-                )
-                YesNoRow(
-                    label = "펌 (Y/N)",
-                    value = lastPerm,
-                    onChange = { lastPerm = it }
-                )
-                YesNoRow(
-                    label = "컬러 (Y/N)",
-                    value = lastColor,
-                    onChange = { lastColor = it }
-                )
-                YesNoRow(
-                    label = "탈색 (Y/N)",
-                    value = lastBleach,
-                    onChange = { lastBleach = it }
-                )
-            }
-
-            Spacer(Modifier.height(8.dp))
-
-            // ---- 자유 입력 3개 ----
-            LabeledTextField(
-                label = stringResource(R.string.last_treatment_uncomfortable),
-                value = uncomfortable,
-                onChange = { uncomfortable = it },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            LabeledTextField(
-                label = stringResource(R.string.last_treatment_concerned),
-                value = concerns,
-                onChange = { concerns = it },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(Modifier.height(24.dp))
-        }
-
-        // 하단 Prev / Next 바
-        PrevNextBar(
-            navController = navController,
-            prevRoute = Screen.Intro.route,
-            nextRoute = Screen.HairConsult.route,
-            nextEnabled = listOf(lastCut, lastPerm, lastColor, lastBleach).any { it != null },
-            onBeforeNavigateNext = {
-                // 👉 저장 로직: ViewModel/Repository에 싱크
-                vm.updateHair { hair ->
-                    hair.copy(
-                        lastCut = lastCut,
-                        lastPerm = lastPerm,
-                        lastColor = lastColor,
-                        lastBleach = lastBleach,
-//                        lastTreatmentDetails = details,
-                        lastTreatmentUncomfortable = uncomfortable,
-                        currentConcerns = concerns
+                // 타이틀
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.hair_condition_check_list),
+                        style = MaterialTheme.typography.headlineSmall,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = stringResource(R.string.hair_treatment_consultation),
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
-                vm.persistStep()
-                true
-            },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
+
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = stringResource(R.string.last_treatment_details))
+                }
+
+                // ---- 컷/펌/컬러/탈색: 개별 Y/N ----
+                Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                    YesNoRow(
+                        label = "컷 (Y/N)",
+                        value = lastCut,
+                        onChange = { lastCut = it }
+                    )
+                    YesNoRow(
+                        label = "펌 (Y/N)",
+                        value = lastPerm,
+                        onChange = { lastPerm = it }
+                    )
+                    YesNoRow(
+                        label = "컬러 (Y/N)",
+                        value = lastColor,
+                        onChange = { lastColor = it }
+                    )
+                    YesNoRow(
+                        label = "탈색 (Y/N)",
+                        value = lastBleach,
+                        onChange = { lastBleach = it }
+                    )
+                }
+
+                Spacer(Modifier.height(8.dp))
+
+                // ---- 자유 입력 3개 ----
+                LabeledTextField(
+                    label = stringResource(R.string.last_treatment_uncomfortable),
+                    value = uncomfortable,
+                    onChange = { uncomfortable = it },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                LabeledTextField(
+                    label = stringResource(R.string.last_treatment_concerned),
+                    value = concerns,
+                    onChange = { concerns = it },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(Modifier.height(24.dp))
+            }
+        }
     }
 }
 
@@ -214,7 +223,7 @@ fun HairConsultPagePreview() {
         }
         val navController = rememberNavController()
 
-        HairConsultPage(
+        FirstScreen(
             vm = fakeVm,
             navController = navController
         )

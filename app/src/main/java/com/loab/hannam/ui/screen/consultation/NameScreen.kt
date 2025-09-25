@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -28,53 +29,79 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.loab.hannam.R
 import com.loab.hannam.ui.SurveyViewModel
+import com.loab.hannam.ui.components.LangBar
+import com.loab.hannam.ui.components.PrevNextBar
+import com.loab.hannam.ui.preview.FakeSurveyRepository
 import com.loab.hannam.ui.screen.navigation.Screen
 import com.loab.hannam.ui.theme.LOABLABHannamApplicationTheme
 
 @Composable
 fun NameScreenContent(
-    name: String,
-    onNameChange: (String) -> Unit,
-    onNextClick: () -> Unit
+    vm: SurveyViewModel,
+    navController: NavController,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = stringResource(R.string.customer_info),
-            fontSize = 40.sp,
-            style = MaterialTheme.typography.titleLarge
-        )
+    val state by vm.uiState.collectAsStateWithLifecycle()
+    var name by remember { mutableStateOf(state.customer.name) }
 
-        Spacer(Modifier.height(100.dp))
-
-        Text(
-            text = stringResource(R.string.customer_name),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(Modifier.height(20.dp))
-
-        OutlinedTextField(
-            value = name,
-            onValueChange = onNameChange,
-            modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color.LightGray, // 비포커스 배경 색상
-                focusedContainerColor = Color.LightGray,   // 포커스 배경 색상
-                unfocusedIndicatorColor = Color.Transparent, // 비포커스 테두리 제거
-                focusedIndicatorColor = Color.Transparent    // 포커스 테두리 제거
+    // 하단 Prev / Next 바
+    Scaffold(
+        bottomBar = {
+            PrevNextBar(
+                navController = navController,
+                prevRoute = Screen.Start.route,
+                nextRoute = Screen.First.route,
+                nextEnabled = name.isNotBlank(),
+                onBeforeNavigateNext = {
+                    vm.setName(name)
+                    vm.persistStep()
+                    true
+                }
             )
+        }
+    ) { padding ->
+        LangBar(
+            currentLang = state.customer.localeTag,
+            onSelectLang = { vm.setLocale(it) }
         )
 
-        Spacer(Modifier.height(24.dp))
+        // 본문
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(horizontal = 24.dp, vertical = 24.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = stringResource(R.string.customer_info),
+                fontSize = 40.sp,
+                style = MaterialTheme.typography.titleLarge
+            )
 
+            Spacer(Modifier.height(50.dp))
 
+            Text(
+                text = stringResource(R.string.customer_name),
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Spacer(Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.LightGray,
+                    focusedContainerColor = Color.LightGray,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent
+                )
+            )
+        }
     }
 }
 
@@ -83,18 +110,9 @@ fun NameScreen(
     vm: SurveyViewModel,
     navController: NavController
 ) {
-    val state by vm.uiState.collectAsStateWithLifecycle()
-    var name by remember { mutableStateOf(state.customer.name) }
-
     NameScreenContent(
-        name = name,
-        onNameChange = { name = it },
-        onNextClick = {
-            if (name.isNotBlank()) {
-                vm.setName(name)
-                navController.navigate(Screen.Intro.route)
-            }
-        }
+        vm = vm,
+        navController = navController
     )
 }
 
@@ -103,10 +121,16 @@ fun NameScreen(
 @Composable
 fun StartScreenPreview() {
     LOABLABHannamApplicationTheme {
+        val fakeVm = remember {
+            SurveyViewModel(
+                repo = FakeSurveyRepository()   // 이미 만드셨던 FakeSurveyRepository
+            )
+        }
+        val navController = rememberNavController()
+
         NameScreenContent(
-            name = "홍길동",
-            onNameChange = {},
-            onNextClick = {}
+            vm = fakeVm,
+            navController = navController
         )
     }
 }

@@ -46,8 +46,10 @@
     <string name="styling_level_option_use_times">次 使用</string>
 
     <!--  PAGE 6  -->
-    <string name="choose_usual_style_image">请选择符合您平常风格与形象的选项。</string>
-    <string name="max_three">（最多可选 3 项）</string>
+    <string name="choose_usual_style_image">
+        请选择符合您平常风格与形象的选项。 \n
+        （最多可选 3 项）
+    </string>
     <string name="style_standard">标准</string>
     <string name="style_soft">柔和</string>
     <string name="style_boyish">中性</string>
