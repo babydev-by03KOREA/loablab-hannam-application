@@ -1,8 +1,12 @@
 package com.loab.hannam.ui.screen.consultation
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -10,12 +14,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,9 +37,17 @@ import com.loab.hannam.data.model.HairChecklist
 import com.loab.hannam.data.model.SurveyState
 import com.loab.hannam.ui.SurveyViewModel
 import com.loab.hannam.ui.components.LangBar
+import com.loab.hannam.ui.components.PrevNextBar
 import com.loab.hannam.ui.preview.FakeSurveyRepository
+import com.loab.hannam.ui.screen.navigation.Screen
 import com.loab.hannam.ui.theme.LOABLABHannamApplicationTheme
 
+enum class ManyOrLessTag(@StringRes val label: Int) {
+    MANY(R.string.many),
+    LESS(R.string.less),
+}
+
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FourthScreen(
     vm: SurveyViewModel,
@@ -41,9 +56,38 @@ fun FourthScreen(
     val state by vm.uiState.collectAsStateWithLifecycle()
     val scroll = rememberScrollState()
 
-    Scaffold (
-        bottomBar = {
+    // 기존 저장값을 enum으로 역변환
+    var selectedLayer by remember(state.hair.layerLevel) {
+        mutableStateOf(
+            state.hair.layerLevel
+                .let { saved -> ManyOrLessTag.entries.find { it.name == saved } }
+        )
+    }
+    var selectedThinning by remember(state.hair.thinningLevel) {
+        mutableStateOf(
+            state.hair.thinningLevel
+                .let { saved -> ManyOrLessTag.entries.find { it.name == saved } }
+        )
+    }
 
+    Scaffold(
+        bottomBar = {
+            PrevNextBar(
+                navController = navController,
+                prevRoute = Screen.Third.route,     // 이전 단계 라우트로 맞춰주세요
+                nextRoute = Screen.Result.route,         // 다음 단계 라우트로 맞춰주세요
+                nextEnabled = (selectedLayer != null && selectedThinning != null),
+                onBeforeNavigateNext = {
+                    vm.updateHair { hair ->
+                        hair.copy(
+                            layerLevel = selectedLayer?.name ?: "",
+                            thinningLevel = selectedThinning?.name ?: ""
+                        )
+                    }
+                    vm.persistStep()
+                    true
+                }
+            )
         }
     ) { paddingValues ->
         Box(
@@ -81,6 +125,82 @@ fun FourthScreen(
                         text = stringResource(R.string.hair_treatment_consultation),
                         style = MaterialTheme.typography.titleMedium
                     )
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.layer),
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center
+                )
+
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    ManyOrLessTag.entries.forEach { tag ->
+                        val checked = selectedLayer == tag
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(end = 8.dp)
+                        ) {
+                            Checkbox(
+                                checked = checked,
+                                onCheckedChange = {
+                                    selectedLayer = if (checked) null else tag
+                                }
+                            )
+                            Text(
+                                text = stringResource(tag.label),
+                                modifier = Modifier.padding(start = 4.dp)
+                            )
+                        }
+                    }
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.thick_layer),
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center
+                )
+
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    ManyOrLessTag.entries.forEach { tag ->
+                        val checked = selectedThinning == tag
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(end = 8.dp)
+                        ) {
+                            Checkbox(
+                                checked = checked,
+                                onCheckedChange = {
+                                    selectedThinning = if (checked) null else tag
+                                }
+                            )
+                            Text(
+                                text = stringResource(tag.label),
+                                modifier = Modifier.padding(start = 4.dp)
+                            )
+                        }
+                    }
                 }
             }
         }
