@@ -53,13 +53,13 @@ fun ResultScreen(
     navController: NavController
 ) {
     val report by vm.report.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var saving by remember { mutableStateOf(false) }
 
     // 화면 진입 시 한 번 생성
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
-        if (report is ReportUiState.Idle) vm.generateReport()
+        vm.generateReport(context)
     }
 
     Scaffold { padding ->
@@ -72,22 +72,6 @@ fun ResultScreen(
                 .padding(padding),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // 타이틀
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(R.string.hair_condition_check_list),
-                    style = MaterialTheme.typography.headlineSmall,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = stringResource(R.string.hair_treatment_consultation),
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-
             // 본문: 상태별 UI
             when (val s = report) {
                 is ReportUiState.Generating, ReportUiState.Idle -> {
@@ -169,7 +153,7 @@ fun ResultScreen(
                                 color = MaterialTheme.colorScheme.error
                             )
                             Spacer(Modifier.height(12.dp))
-                            Button(onClick = { vm.regenerateReport() }) {
+                            Button(onClick = { vm.regenerateReport(context) }) {
                                 Text(stringResource(R.string.retry))
                             }
                         }

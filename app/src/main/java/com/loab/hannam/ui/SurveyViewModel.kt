@@ -1,6 +1,7 @@
 package com.loab.hannam.ui
 
 import android.content.Context
+import android.content.res.Resources
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.loab.hannam.data.model.HairChecklist
@@ -64,17 +65,14 @@ class SurveyViewModel(
     val report: StateFlow<ReportUiState> = _report
 
     /** 결과 이미지 생성 트리거 */
-    fun generateReport() {
-        // 중복 호출 방지
+    fun generateReport(context: Context) {
         if (_report.value is ReportUiState.Generating) return
-
         _report.value = ReportUiState.Generating
         val snapshot = _uiState.value
 
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                // 무거운 비트맵 렌더링은 Default(백그라운드)에서
-                val bmp = ReportRenderer.render(snapshot)  // 이미 만들어 둔 ReportRenderer 사용
+                val bmp = ReportRenderer.render(snapshot, context.resources)
                 withContext(Dispatchers.Main) {
                     _report.value = ReportUiState.Ready(bmp)
                 }
@@ -87,9 +85,9 @@ class SurveyViewModel(
     }
 
     /** 다시 만들기(에러/재시도) */
-    fun regenerateReport() {
+    fun regenerateReport(context: Context) {
         _report.value = ReportUiState.Idle
-        generateReport()
+        generateReport(context)
     }
 
     fun resetSurvey() {
@@ -105,13 +103,10 @@ class SurveyViewModel(
 
     /** 결과 비트맵 렌더 + 저장 (백그라운드 스레드) */
     suspend fun renderAndSave(context: Context): Boolean = withContext(Dispatchers.Default) {
-        return@withContext try {
-            val bmp = ReportRenderer.render(_uiState.value, context)
+        try {
+            val bmp = ReportRenderer.render(_uiState.value, context.resources) // ✅
             val fileName = "Loab_${_uiState.value.customer.name}_${System.currentTimeMillis()}"
-            val uri = ReportSaver.savePng(context, bmp, fileName)
-            uri != null
-        } catch (_: Throwable) {
-            false
-        }
+            ReportSaver.savePng(context, bmp, fileName) != null
+        } catch (_: Throwable) { false }
     }
 }

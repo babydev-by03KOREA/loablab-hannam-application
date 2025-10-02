@@ -88,7 +88,8 @@ fun FourthScreen(
                     vm.updateHair { hair ->
                         hair.copy(
                             layerLevel = selectedLayer?.name ?: "",
-                            thinningLevel = selectedThinning?.name ?: ""
+                            thinningLevel = selectedThinning?.name ?: "",
+                            todayDesign = todayDesign
                         )
                     }
                     vm.persistStep()

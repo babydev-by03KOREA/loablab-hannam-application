@@ -112,7 +112,9 @@ fun FirstScreen(
                             lastCut = lastCut,
                             lastPerm = lastPerm,
                             lastColor = lastColor,
-                            lastBleach = lastBleach
+                            lastBleach = lastBleach,
+                            lastTreatmentUncomfortable = uncomfortable,
+                            currentConcerns = concerns
                         )
                     }
                     vm.persistStep()

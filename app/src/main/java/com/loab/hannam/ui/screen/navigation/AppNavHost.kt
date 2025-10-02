@@ -52,7 +52,7 @@ fun AppNavHost(
         composable(Screen.Fifth.route) {
             FifthScreen(vm = vm, navController = navController)
         }
-        composable(Screen.Fifth.route) {
+        composable(Screen.Result.route) {
             ResultScreen(vm = vm, navController = navController)
         }
         composable(Screen.ThankYou.route) {

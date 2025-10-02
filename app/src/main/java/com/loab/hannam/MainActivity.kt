@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.loab.hannam.data.repository.SurveyRepositoryImpl
 import com.loab.hannam.data.store.SurveyLocalStore
 import com.loab.hannam.ui.SurveyViewModel
@@ -18,23 +20,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val navController = rememberNavController()
+            val repo = SurveyRepositoryImpl(SurveyLocalStore(applicationContext))
+            val vm: SurveyViewModel = viewModel(factory = SurveyViewModelFactory(repo))
+            val state by vm.uiState.collectAsStateWithLifecycle()
+
             LOABLABHannamApplicationTheme {
-                val navController = rememberNavController()
-
-                val repo = SurveyRepositoryImpl(SurveyLocalStore(applicationContext))
-                val vm: SurveyViewModel = viewModel(factory = SurveyViewModelFactory(repo))
-
-                AppNavHost(navController = navController, vm = vm)
+                ApplyAppLocale(state.customer.localeTag) {
+                    AppNavHost(navController = navController, vm = vm)
+                }
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    LOABLABHannamApplicationTheme {
-
     }
 }
