@@ -21,4 +21,8 @@ class FakeSurveyRepository(
     override suspend fun update(block: (SurveyState) -> SurveyState) {
         _state.value = block(_state.value)
     }
+
+    override suspend fun overwrite(state: SurveyState) {
+        _state.value = state
+    }
 }

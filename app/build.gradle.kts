@@ -65,4 +65,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel)
     // https://mvnrepository.com/artifact/androidx.navigation/navigation-compose
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.material.icons.extended)
 }

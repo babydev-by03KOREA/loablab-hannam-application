@@ -6,12 +6,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.loab.hannam.ui.SurveyViewModel
+import com.loab.hannam.ui.screen.consultation.FifthScreen
 import com.loab.hannam.ui.screen.consultation.FirstScreen
 import com.loab.hannam.ui.screen.consultation.FourthScreen
 import com.loab.hannam.ui.screen.consultation.NameScreen
 import com.loab.hannam.ui.screen.consultation.SecondScreen
+import com.loab.hannam.ui.screen.consultation.ThankYouScreen
 import com.loab.hannam.ui.screen.consultation.ThirdScreen
 import com.loab.hannam.ui.screen.intro.IntroScreen
+import com.loab.hannam.ui.screen.result.ResultScreen
 import com.loab.hannam.ui.screen.start.StartScreen
 
 @Composable
@@ -45,6 +48,15 @@ fun AppNavHost(
         }
         composable(Screen.Fourth.route) {
             FourthScreen(vm = vm, navController = navController)
+        }
+        composable(Screen.Fifth.route) {
+            FifthScreen(vm = vm, navController = navController)
+        }
+        composable(Screen.Fifth.route) {
+            ResultScreen(vm = vm, navController = navController)
+        }
+        composable(Screen.ThankYou.route) {
+            ThankYouScreen(vm = vm, navController = navController)
         }
     }
 }

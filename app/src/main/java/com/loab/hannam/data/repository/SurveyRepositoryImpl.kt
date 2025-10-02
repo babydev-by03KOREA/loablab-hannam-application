@@ -14,4 +14,5 @@ class SurveyRepositoryImpl(
     override val state: Flow<SurveyState> = store.stateFlow
     override suspend fun save(partial: SurveyState) = store.overwrite(partial)
     override suspend fun update(block: (SurveyState) -> SurveyState) = store.update(block)
+    override suspend fun overwrite(state: SurveyState) = store.overwrite(state)
 }

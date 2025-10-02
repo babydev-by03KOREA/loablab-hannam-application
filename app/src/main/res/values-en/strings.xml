@@ -2,10 +2,6 @@
 <resources>
     <string name="app_name">LOABLAB Hannam Application</string>
 
-    <string name="save_image">Save</string>
-    <string name="saved_success">Image saved successfully!</string>
-    <string name="saved_fail">Failed to save image.</string>
-
     <string name="start">START</string>
 
     <string name="customer_info">CUSTOMER INFO</string>
@@ -76,7 +72,14 @@
 
     <!--  PAGE 8  -->
     <string name="shape_your_face">What do you think your face shape is?</string>
-    <string name="treatment_consultation_paper">Generating treatment consultation form...</string>
+
+    <!--  PAGE 9  -->
+    <string name="generating_report">Generating consultation sheet…</string>
+    <string name="save_image">Save</string>
+    <string name="saved_success">Saved successfully</string>
+    <string name="saved_fail">Save failed</string>
+    <string name="generate_failed">Failed to generate</string>
+    <string name="retry">Retry</string>
 
     <!--  PAGE 10  -->
     <string name="thankyou_for_your_time">Thank you for your precious time.</string>

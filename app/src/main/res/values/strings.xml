@@ -1,10 +1,6 @@
 <resources>
     <string name="app_name">LOABLAB Hannam Application</string>
 
-    <string name="save_image">저장하기</string>
-    <string name="saved_success">이미지 저장에 성공하였습니다!</string>
-    <string name="saved_fail">이미지 저장에 실패하였습니다!</string>
-
     <string name="start">START</string>
 
     <string name="customer_info">CUSTOMER INFO</string>
@@ -75,7 +71,14 @@
 
     <!--  PAGE 8  -->
     <string name="shape_your_face">자신이 생각하는 얼굴형</string>
-    <string name="treatment_consultation_paper">시술상담지 생성중...</string>
+
+    <!--  PAGE 9  -->
+    <string name="generating_report">시술상담지 생성중…</string>
+    <string name="save_image">저장하기</string>
+    <string name="saved_success">저장되었습니다</string>
+    <string name="saved_fail">저장 실패</string>
+    <string name="generate_failed">생성에 실패했어요</string>
+    <string name="retry">재시도</string>
 
     <!--  PAGE 10  -->
     <string name="thankyou_for_your_time">소중한 시간 감사합니다.</string>

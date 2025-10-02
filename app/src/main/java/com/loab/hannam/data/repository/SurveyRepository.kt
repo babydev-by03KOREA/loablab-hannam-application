@@ -7,4 +7,5 @@ interface SurveyRepository {
     val state: Flow<SurveyState>
     suspend fun save(partial: SurveyState)
     suspend fun update(block: (SurveyState) -> SurveyState)
+    suspend fun overwrite(state: SurveyState)
 }

@@ -2,10 +2,6 @@
 <resources>
     <string name="app_name">LOABLAB Hannam 应用程序</string>
 
-    <string name="save_image">保存</string>
-    <string name="saved_success">图片已成功保存！</string>
-    <string name="saved_fail">图片保存失败。</string>
-
     <string name="start">开始</string>
 
     <string name="customer_info">客户信息</string>
@@ -76,7 +72,14 @@
 
     <!--  PAGE 8  -->
     <string name="shape_your_face">您认为自己的脸型是？</string>
-    <string name="treatment_consultation_paper">正在生成施术咨询表...</string>
+
+    <!--  PAGE 9  -->
+    <string name="generating_report">正在生成咨询表…</string>
+    <string name="save_image">保存</string>
+    <string name="saved_success">保存成功</string>
+    <string name="saved_fail">保存失败</string>
+    <string name="generate_failed">生成失败</string>
+    <string name="retry">重试</string>
 
     <!--  PAGE 10  -->
     <string name="thankyou_for_your_time">感谢您的宝贵时间。</string>
