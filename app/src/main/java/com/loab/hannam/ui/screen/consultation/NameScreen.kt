@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -24,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -94,6 +97,19 @@ fun NameScreenContent(
                 value = name,
                 onValueChange = { name = it },
                 modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done   // 엔터키를 "완료(확인)"으로 표시
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        if (name.isNotBlank()) {
+                            vm.setName(name)
+                            vm.persistStep()
+                            navController.navigate(Screen.First.route)
+                        }
+                    }
+                ),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.LightGray,
                     focusedContainerColor = Color.LightGray,

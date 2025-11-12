@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,6 +52,7 @@ import com.loab.hannam.ui.theme.LOABLABHannamApplicationTheme
 
 enum class ManyOrLessTag(@StringRes val label: Int) {
     MANY(R.string.many),
+    NORMAL(R.string.normal),
     LESS(R.string.less),
 }
 
@@ -227,7 +231,15 @@ fun FourthScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.LightGray),
-                        minLines = 3
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done   // 엔터키를 "완료(확인)"으로 표시
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                vm.persistStep()
+                                navController.navigate(Screen.Fifth.route)
+                            }
+                        ),
                     )
                 }
             }

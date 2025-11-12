@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -11,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -37,11 +39,11 @@ enum class ImportantTag(@StringRes val label: Int) {
     );
 }
 
-enum class StyleLevel(@StringRes val label: Int) {
+/*enum class StyleLevel(@StringRes val label: Int) {
     DEVICE(R.string.styling_level_option_use_device), EVERYDAY(R.string.styling_level_option_use_everyday), WEEK(
         R.string.styling_level_option_use_week
     )   // 주 n회(숫자 필요)
-}
+}*/
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -57,14 +59,15 @@ fun SecondScreen(
     // 중요포인트 다중선택 (최대 3개)
     var selectedImportant by remember {
         mutableStateOf(
-            state.hair.importantInStyle.mapNotNull { str ->
-                ImportantTag.entries.find { it.name == str }
-            }.toSet()
+            state.hair.stylingLevel.mapNotNull { key ->
+                // 저장은 enum name(NATURAL/BLOW/ROLL) 기준으로 권장
+                runCatching { ImportantTag.valueOf(key) }.getOrNull()
+            }.toMutableSet()
         )
     }
 
     // 스타일링 레벨
-    var selectedLevels by remember {
+    /*var selectedLevels by remember {
         mutableStateOf(
             state.hair.stylingLevel.mapNotNull { s ->
                 when {
@@ -79,7 +82,9 @@ fun SecondScreen(
     var weekTimesText by remember {
         val week = state.hair.stylingLevel.firstOrNull { it.startsWith("WEEK:") }
         mutableStateOf(week?.removePrefix("WEEK:") ?: "")
-    }
+    }*/
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(
         bottomBar = {
@@ -93,17 +98,10 @@ fun SecondScreen(
                     // 저장: 모델 구조를 바꾸지 않기 위해 문자열 리스트로 인코딩
                     val importantSaved: List<String> = selectedImportant.map { it.name }
 
-                    val stylingSaved = buildList {
-                        if (StyleLevel.DEVICE in selectedLevels) add(StyleLevel.DEVICE.name)
-                        if (StyleLevel.EVERYDAY in selectedLevels) add(StyleLevel.EVERYDAY.name)
-                        if (StyleLevel.WEEK in selectedLevels && weekTimesText.isNotBlank()) add("WEEK:${weekTimesText}")   // 예: WEEK:3
-                    }
-
                     vm.updateHair { hair ->
                         hair.copy(
                             precautions = precautions,
-                            importantInStyle = importantSaved,
-                            stylingLevel = stylingSaved
+                            stylingLevel = importantSaved
                         )
                     }
                     vm.persistStep()
@@ -166,7 +164,15 @@ fun SecondScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.LightGray),
-                        minLines = 3
+//                        minLines = 3,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done  // ✅ 엔터키를 '완료'로 표시
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                keyboardController?.hide()  // ✅ 키보드 닫기
+                            }
+                        )
                     )
                 }
 
@@ -195,91 +201,94 @@ fun SecondScreen(
                                 modifier = Modifier.padding(end = 8.dp)
                             ) {
                                 Checkbox(
-                                    checked = checked, onCheckedChange = { isChecked ->
+                                    checked = checked,
+                                    onCheckedChange = { isChecked ->
                                         val next = when {
                                             isChecked && selectedImportant.size < 3 -> selectedImportant + tag
                                             !isChecked -> selectedImportant - tag
                                             else -> selectedImportant
                                         }
-                                        selectedImportant = next
-                                        // 저장은 키로(= enum name)
+                                        selectedImportant = next.toMutableSet()
+
+                                        // 저장은 enum name으로
                                         vm.updateHair { hair ->
-                                            hair.copy(importantInStyle = next.map { it.name })
+                                            hair.copy(stylingLevel = next.map { it.name })
                                         }
-                                    })
+                                    }
+                                )
                                 Text(
                                     text = stringResource(tag.label),
                                     modifier = Modifier.padding(start = 4.dp)
                                 )
                             }
                         }
-                    }
-                }
 
-                // 3) 스타일링 레벨
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.styling_level),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center
-                    )
-                    // 기기사용
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(
-                            checked = StyleLevel.DEVICE in selectedLevels,
-                            onCheckedChange = { checked ->
-                                selectedLevels = if (checked) selectedLevels + StyleLevel.DEVICE
-                                else selectedLevels - StyleLevel.DEVICE
-                            })
-                        Text(text = stringResource(StyleLevel.DEVICE.label))
-                    }
-                    // 매일사용
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(
-                            checked = StyleLevel.EVERYDAY in selectedLevels,
-                            onCheckedChange = { checked ->
-                                selectedLevels = if (checked) selectedLevels + StyleLevel.EVERYDAY
-                                else selectedLevels - StyleLevel.EVERYDAY
-                            })
-                        Text(text = stringResource(StyleLevel.EVERYDAY.label))
-                    }
-                    // 주 n회
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(
-                            checked = StyleLevel.WEEK in selectedLevels,
-                            onCheckedChange = { checked ->
-                                selectedLevels = if (checked) selectedLevels + StyleLevel.WEEK
-                                else {
-                                    weekTimesText = ""
-                                    selectedLevels - StyleLevel.WEEK
-                                }
-                            })
-                        Text(text = stringResource(StyleLevel.WEEK.label))
-                        Spacer(Modifier.width(8.dp))
-                        OutlinedTextField(
-                            value = weekTimesText,
-                            onValueChange = { raw ->
-                                // 숫자만 남기고 최대 2자리로 제한
-                                weekTimesText = raw.filter { it.isDigit() }.take(2)
-                            },
-                            enabled = StyleLevel.WEEK in selectedLevels,
-                            singleLine = true,
-                            modifier = Modifier
-                                .width(64.dp)
-                                .padding(vertical = 2.dp),
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
-                            ),
-                            textStyle = LocalTextStyle.current.copy(
+                        // 3) 스타일링 레벨
+                        /*Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.styling_level),
+                                style = MaterialTheme.typography.titleMedium,
                                 textAlign = TextAlign.Center
-                            ),
-                            placeholder = { Text("0") })
-                        Spacer(Modifier.width(10.dp))
-                        Text(text = stringResource(R.string.styling_level_option_use_times))
+                            )
+                            // 기기사용
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Checkbox(
+                                    checked = StyleLevel.DEVICE in selectedLevels,
+                                    onCheckedChange = { checked ->
+                                        selectedLevels = if (checked) selectedLevels + StyleLevel.DEVICE
+                                        else selectedLevels - StyleLevel.DEVICE
+                                    })
+                                Text(text = stringResource(StyleLevel.DEVICE.label))
+                            }
+                            // 매일사용
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Checkbox(
+                                    checked = StyleLevel.EVERYDAY in selectedLevels,
+                                    onCheckedChange = { checked ->
+                                        selectedLevels = if (checked) selectedLevels + StyleLevel.EVERYDAY
+                                        else selectedLevels - StyleLevel.EVERYDAY
+                                    })
+                                Text(text = stringResource(StyleLevel.EVERYDAY.label))
+                            }
+                            // 주 n회
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Checkbox(
+                                    checked = StyleLevel.WEEK in selectedLevels,
+                                    onCheckedChange = { checked ->
+                                        selectedLevels = if (checked) selectedLevels + StyleLevel.WEEK
+                                        else {
+                                            weekTimesText = ""
+                                            selectedLevels - StyleLevel.WEEK
+                                        }
+                                    })
+                                Text(text = stringResource(StyleLevel.WEEK.label))
+                                Spacer(Modifier.width(8.dp))
+                                OutlinedTextField(
+                                    value = weekTimesText,
+                                    onValueChange = { raw ->
+                                        // 숫자만 남기고 최대 2자리로 제한
+                                        weekTimesText = raw.filter { it.isDigit() }.take(2)
+                                    },
+                                    enabled = StyleLevel.WEEK in selectedLevels,
+                                    singleLine = true,
+                                    modifier = Modifier
+                                        .width(64.dp)
+                                        .padding(vertical = 2.dp),
+                                    keyboardOptions = KeyboardOptions(
+                                        keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+                                    ),
+                                    textStyle = LocalTextStyle.current.copy(
+                                        textAlign = TextAlign.Center
+                                    ),
+                                    placeholder = { Text("0") })
+                                Spacer(Modifier.width(10.dp))
+                                Text(text = stringResource(R.string.styling_level_option_use_times))
+                            }
+                        }*/
                     }
                 }
             }
@@ -294,7 +303,7 @@ fun PreferenceSecondPagePreview() {
         // 초기 상태 세팅
         val initialState = SurveyState(
             hair = HairChecklist(
-                precautions = "", importantInStyle = listOf("자연건조"), stylingLevel = listOf("매일사용")
+                precautions = "", stylingLevel = listOf("자연건조")
             )
         )
 

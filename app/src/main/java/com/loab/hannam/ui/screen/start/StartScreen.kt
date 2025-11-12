@@ -69,17 +69,17 @@ fun StartScreenContent(
             .navigationBarsPadding()
     ) {
         // 아주 연한 워터마크
-        Text(
-            text = "LOAB",
-            modifier = Modifier
-                .align(Alignment.Center)
-                .graphicsLayer {
-                    rotationZ = 90f
-                }
-                .alpha(0.06f),
-            fontSize = 150.sp,
-            fontWeight = FontWeight.Normal
-        )
+//        Text(
+//            text = "LOAB",
+//            modifier = Modifier
+//                .align(Alignment.Center)
+//                .graphicsLayer {
+//                    rotationZ = 90f
+//                }
+//                .alpha(0.06f),
+//            fontSize = 150.sp,
+//            fontWeight = FontWeight.Normal
+//        )
 
         Column(
             modifier = Modifier.fillMaxSize(),

@@ -67,6 +67,7 @@
     <string name="layer">Layer Amount</string>
     <string name="thick_layer">Thickness</string>
     <string name="many">Thick</string>
+    <string name="normal">Normal</string>
     <string name="less">Thin</string>
     <string name="today_want_today">Design you want today</string>
 

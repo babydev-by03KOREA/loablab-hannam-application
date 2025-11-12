@@ -129,7 +129,7 @@ object ReportRenderer {
         canvas.drawText("헤어 시술 상담", leftColX, y, subtitle); y += 24f
         drawDivider(canvas, leftColX, width - margin, y + 12f)
 
-        val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA)
             .format(Date(state.customer.dateMillis))
 
         y += 42f
@@ -216,7 +216,7 @@ object ReportRenderer {
         // 5) 가장 중요시 여기는 부분
         y += lineGap
         drawQuestionLine(5, "헤어스타일에서 가장 중요시 여기는 부분은?", y)
-        val importantSet = toSetIgnoreCase(state.hair.importantInStyle)
+        val importantSet = toSetIgnoreCase(state.hair.stylingLevel)
         val impItems = listOf(
             "자연건조" to ("NATURAL" in importantSet || "자연건조" in importantSet),
             "드라이건조" to ("BLOW" in importantSet || "드라이건조" in importantSet),
@@ -225,7 +225,7 @@ object ReportRenderer {
         y = drawChecksGrid(impItems, y + 22f, cols = 3)
 
         // 6) 스타일링 레벨
-        y += lineGap
+        /*y += lineGap
         drawQuestionLine(6, "스타일링 레벨은 어떻게 되시나요?", y)
         val levelSet = toSetIgnoreCase(state.hair.stylingLevel)
         val weekRaw = state.hair.stylingLevel.firstOrNull {
@@ -237,7 +237,7 @@ object ReportRenderer {
             "매일사용" to ("EVERYDAY" in levelSet || "매일사용" in levelSet),
             "주(${weekNum})회사용" to (levelSet.any { it.startsWith("WEEK:") } || levelSet.contains("주"))
         )
-        y = drawChecksGrid(levelItems, y + 22f, cols = 3, colW = 220f)
+        y = drawChecksGrid(levelItems, y + 22f, cols = 3, colW = 220f)*/
 
         // 7) 평소 스타일/이미지
         y += lineGap
