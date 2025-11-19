@@ -1,6 +1,7 @@
 package com.loab.hannam.ui.screen.consultation
 
 import android.annotation.SuppressLint
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +32,7 @@ import com.loab.hannam.ui.theme.LOABLABHannamApplicationTheme
 /** Y/N 두 개 선택 가능한 칩 Row */
 @Composable
 private fun YesNoRow(
-    label: String,
+    @StringRes label: Int,
     value: Boolean?,
     onChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
@@ -41,7 +42,7 @@ private fun YesNoRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = label, style = MaterialTheme.typography.bodyLarge)
+        Text(text = stringResource(label), style = MaterialTheme.typography.bodyLarge)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilterChip(
                 selected = value == true,
@@ -173,22 +174,22 @@ fun FirstScreen(
                 // ---- 컷/펌/컬러/탈색: 개별 Y/N ----
                 Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     YesNoRow(
-                        label = "컷 (Y/N)",
+                        label = R.string.cut,
                         value = lastCut,
                         onChange = { lastCut = it }
                     )
                     YesNoRow(
-                        label = "펌 (Y/N)",
+                        label = R.string.perm,
                         value = lastPerm,
                         onChange = { lastPerm = it }
                     )
                     YesNoRow(
-                        label = "컬러 (Y/N)",
+                        label = R.string.color,
                         value = lastColor,
                         onChange = { lastColor = it }
                     )
                     YesNoRow(
-                        label = "탈색 (Y/N)",
+                        label = R.string.decolorization,
                         value = lastBleach,
                         onChange = { lastBleach = it }
                     )

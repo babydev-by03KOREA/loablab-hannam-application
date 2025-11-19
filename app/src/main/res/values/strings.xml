@@ -19,6 +19,10 @@
     <string name="hair_treatment_consultation">헤어 시술 상담</string>
 
     <!--  PAGE 4  -->
+    <string name="cut">컷 (Y/N)</string>
+    <string name="perm">펌 (Y/N)</string>
+    <string name="color">컬러 (Y/N)</string>
+    <string name="decolorization">탈색 (Y/N)</string>
     <string name="last_treatment_details">마지막 시술내역을 모두 작성해주세요.</string>
     <string name="last_treatment_uncomfortable">이전 시술에서 불편했던 점이 있다면 적어주세요.</string>
     <string name="last_treatment_concerned">현재 스타일중 고민되는 점을 적어주세요.</string>
@@ -34,7 +38,7 @@
     <string name="most_important_hairstyle_option_dry">드라이건조</string>
     <string name="most_important_hairstyle_option_rolldry">롤드라이</string>
 
-    <string name="styling_level">스타일링 레벨은 어떻게 되시나요?</string>
+    <string name="styling_level">평소 스타일링은 어떻게 하시나요?</string>
     <string name="styling_level_option_use_device">기기사용(고데기, 에어랩)</string>
     <string name="styling_level_option_use_everyday">매일사용</string>
     <string name="styling_level_option_use_week">주</string>
@@ -71,7 +75,7 @@
     <string name="today_want_today">오늘 하고싶은 디자인</string>
 
     <!--  PAGE 8  -->
-    <string name="shape_your_face">자신이 생각하는 얼굴형</string>
+    <string name="shape_your_face">내가 생각하는 얼굴형</string>
 
     <!--  PAGE 9  -->
     <string name="generating_report">시술상담지 생성중…</string>

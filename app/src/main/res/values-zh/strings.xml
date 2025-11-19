@@ -20,6 +20,10 @@
     <string name="hair_treatment_consultation">美发施术咨询</string>
 
     <!--  PAGE 4  -->
+    <string name="cut">理发 (Y/N)</string>
+    <string name="perm">烫发 (Y/N)</string>
+    <string name="color">颜色 (Y/N)</string>
+    <string name="decolorization">脱色 (Y/N)</string>
     <string name="last_treatment_details">请填写您上次施术的所有内容。</string>
     <string name="last_treatment_uncomfortable">如果上次施术有任何不适，请填写。</string>
     <string name="last_treatment_concerned">请填写您目前发型中困扰的地方。</string>

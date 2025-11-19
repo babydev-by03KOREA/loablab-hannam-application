@@ -20,6 +20,10 @@
     <string name="hair_treatment_consultation">Hair Treatment Consultation</string>
 
     <!--  PAGE 4  -->
+    <string name="cut">CUT (Y/N)</string>
+    <string name="perm">PERM (Y/N)</string>
+    <string name="color">COLOR (Y/N)</string>
+    <string name="decolorization">DECOLORIZATION (Y/N)</string>
     <string name="last_treatment_details">Please provide details of your last treatment.</string>
     <string name="last_treatment_uncomfortable">If there was anything uncomfortable during your previous treatment, please describe it.</string>
     <string name="last_treatment_concerned">Please write down the concerns you have with your current style.</string>

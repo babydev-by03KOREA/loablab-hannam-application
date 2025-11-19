@@ -8,6 +8,7 @@ import com.loab.hannam.data.model.HairChecklist
 import com.loab.hannam.data.model.SurveyState
 import com.loab.hannam.data.repository.SurveyRepository
 import com.loab.hannam.report.ReportRenderer
+import com.loab.hannam.report.ReportRenderer.withLocale
 import com.loab.hannam.report.ReportSaver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,10 +70,13 @@ class SurveyViewModel(
         if (_report.value is ReportUiState.Generating) return
         _report.value = ReportUiState.Generating
         val snapshot = _uiState.value
+        val selectedLocale = snapshot.customer.localeTag
 
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                val bmp = ReportRenderer.render(snapshot, context.resources)
+                val localeContext = context.withLocale(selectedLocale)
+                val bmp = ReportRenderer.render(snapshot, localeContext.resources)
+
                 withContext(Dispatchers.Main) {
                     _report.value = ReportUiState.Ready(bmp)
                 }
@@ -107,6 +111,8 @@ class SurveyViewModel(
             val bmp = ReportRenderer.render(_uiState.value, context.resources) // ✅
             val fileName = "Loab_${_uiState.value.customer.name}_${System.currentTimeMillis()}"
             ReportSaver.savePng(context, bmp, fileName) != null
-        } catch (_: Throwable) { false }
+        } catch (_: Throwable) {
+            false
+        }
     }
 }

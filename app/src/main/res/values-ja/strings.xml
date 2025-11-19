@@ -20,6 +20,10 @@
     <string name="hair_treatment_consultation">ヘア施術カウンセリング</string>
 
     <!--  PAGE 4  -->
+    <string name="cut">カット (Y/N)</string>
+    <string name="perm">パーマ (Y/N)</string>
+    <string name="color">色 (Y/N)</string>
+    <string name="decolorization">脱色 (Y/N)</string>
     <string name="last_treatment_details">前回の施術内容をすべてご記入ください。</string>
     <string name="last_treatment_uncomfortable">前回の施術で不快に感じた点があればご記入ください。</string>
     <string name="last_treatment_concerned">現在のスタイルで気になる点をご記入ください。</string>

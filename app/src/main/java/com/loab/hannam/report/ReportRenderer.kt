@@ -1,5 +1,6 @@
 package com.loab.hannam.report
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.util.TypedValue
@@ -15,9 +16,21 @@ import java.util.*
  */
 object ReportRenderer {
 
+    // 다국어 처리 function
+    fun Context.withLocale(localeTag: String): Context {
+        val locale = Locale.forLanguageTag(localeTag)
+        val config = this.resources.configuration
+        config.setLocale(locale)
+        return this.createConfigurationContext(config)
+    }
+
     // ---------- Typography / Paint helpers ----------
     private fun spToPx(sp: Float): Float =
-        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, Resources.getSystem().displayMetrics)
+        TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            sp,
+            Resources.getSystem().displayMetrics
+        )
 
     private fun newPaint(
         color: Int = Color.BLACK,
@@ -28,7 +41,8 @@ object ReportRenderer {
         this.color = color
         textSize = spToPx(sizeSp)
         textAlign = align
-        typeface = Typeface.create(Typeface.SANS_SERIF, if (bold) Typeface.BOLD else Typeface.NORMAL)
+        typeface =
+            Typeface.create(Typeface.SANS_SERIF, if (bold) Typeface.BOLD else Typeface.NORMAL)
     }
 
     /** 폭을 넘지 않도록 텍스트를 여러 줄로 그리며 마지막 y(다음 줄 시작 baseline)를 반환 */
@@ -63,10 +77,17 @@ object ReportRenderer {
         canvas.drawRoundRect(r, 4f, 4f, box)
         if (checked) {
             val mark = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = Color.BLACK; style = Paint.Style.STROKE; strokeWidth = 4f; strokeCap = Paint.Cap.ROUND
+                color = Color.BLACK; style = Paint.Style.STROKE; strokeWidth = 4f; strokeCap =
+                Paint.Cap.ROUND
             }
             canvas.drawLine(r.left + size * 0.20f, cy, cx, r.bottom - size * 0.20f, mark)
-            canvas.drawLine(cx, r.bottom - size * 0.20f, r.right - size * 0.18f, r.top + size * 0.22f, mark)
+            canvas.drawLine(
+                cx,
+                r.bottom - size * 0.20f,
+                r.right - size * 0.18f,
+                r.top + size * 0.22f,
+                mark
+            )
         }
     }
 
@@ -126,7 +147,12 @@ object ReportRenderer {
 
         // 헤더
         canvas.drawText("HAIR CONDITION CHECK LIST", leftColX, y, title); y += 38f
-        canvas.drawText("헤어 시술 상담", leftColX, y, subtitle); y += 24f
+        canvas.drawText(
+            res.getString(R.string.hair_treatment_consultation),
+            leftColX,
+            y,
+            subtitle
+        ); y += 24f
         drawDivider(canvas, leftColX, width - margin, y + 12f)
 
         val dateStr = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA)
@@ -140,15 +166,32 @@ object ReportRenderer {
         canvas.drawText("NAME", leftColX, y, label)
         canvas.drawText(state.customer.name, rightColX, y, value)
 
-        y += 28f
+        y += 30
         drawDivider(canvas, leftColX, width - margin, y)
 
         // 공통 질문/답변 헬퍼
         val lineGap = 30f
-        fun drawQuestionLine(n: Int, text: String, yBaseline: Float) {
-            canvas.drawText("$n.", leftColX, yBaseline, numPaint)
-            val qStart = leftColX + 22f
-            drawParagraph(canvas, text, qStart, yBaseline, leftColW - 22f, qPaint)
+        fun drawQuestionLine(
+            n: Int,
+            text: String,
+            startY: Float
+        ): Float {
+            // 번호는 맨 위 줄 기준으로
+            canvas.drawText("$n.", leftColX, startY, numPaint)
+
+            val qStartX = leftColX + 22f
+            // 여러 줄로 쭉 그린 뒤, 마지막 줄 다음 y가 반환됨
+            val afterY = drawParagraph(
+                canvas = canvas,
+                text = text,
+                x = qStartX,
+                startY = startY,
+                maxWidth = leftColW - 22f,
+                paint = qPaint,
+                lineSpacing = 4f
+            )
+
+            return afterY
         }
 
         fun drawFreeAnswer(y0: Float, txt: String): Float {
@@ -161,7 +204,7 @@ object ReportRenderer {
             items: List<Pair<String, Boolean>>,
             yStart: Float,
             colW: Float = 200f,
-            rowH: Float = 24f,
+            rowH: Float = 30f,
             cols: Int = 4
         ): Float {
             var x = rightColX
@@ -169,7 +212,9 @@ object ReportRenderer {
             items.forEachIndexed { i, (labelText, checked) ->
                 drawCheck(canvas, x, yGrid, labelText, checked, ansPaint)
                 x += colW
-                if ((i + 1) % cols == 0) { x = rightColX; yGrid += rowH }
+                if ((i + 1) % cols == 0) {
+                    x = rightColX; yGrid += rowH
+                }
             }
             return yGrid
         }
@@ -179,50 +224,61 @@ object ReportRenderer {
             var x = startX
             labels.zip(checks).forEach { (lb, ck) ->
                 drawCheck(canvas, x, yBase, lb, ck, ansPaint)
-                x += 100f
+                x += 120f
             }
         }
 
         // 1) 마지막 시술내역 (컷/펌/컬러/탈색 Y/N)
         y += lineGap
-        drawQuestionLine(1, "마지막 시술내역을 모두 작성해주세요.", y)
-        var row = y + 22f
+        drawQuestionLine(1, res.getString(R.string.last_treatment_details), y)
+        var row = y + 12f
         fun ynRow(titleText: String, v: Boolean?) {
             canvas.drawText(titleText, rightColX, row, value)
-            drawYNRow(ynLabels(v).first, ynLabels(v).second, row, rightColX + 90f)
-            row += 24f
+            drawYNRow(ynLabels(v).first, ynLabels(v).second, row, rightColX + 460f)
+            row += 40f
         }
-        ynRow("컷", state.hair.lastCut)
-        ynRow("펌", state.hair.lastPerm)
-        ynRow("컬러", state.hair.lastColor)
-        ynRow("탈색", state.hair.lastBleach)
+        ynRow(res.getString(R.string.cut), state.hair.lastCut)
+        ynRow(res.getString(R.string.perm), state.hair.lastPerm)
+        ynRow(res.getString(R.string.perm), state.hair.lastColor)
+        ynRow(res.getString(R.string.decolorization), state.hair.lastBleach)
         y = row
 
         // 2) 이전 시술 불편사항
         y += lineGap
-        drawQuestionLine(2, "이전 시술에서 불편했던 점이 있다면 적어주세요.", y)
-        y = drawFreeAnswer(y, state.hair.lastTreatmentUncomfortable)
+        drawQuestionLine(2, res.getString(R.string.last_treatment_uncomfortable), y)
+        y = drawFreeAnswer(y + 20f, state.hair.lastTreatmentUncomfortable)
 
         // 3) 현재 고민
         y += lineGap
-        drawQuestionLine(3, "현재 스타일중 고민되는 점을 적어주세요.", y)
-        y = drawFreeAnswer(y, state.hair.currentConcerns)
+        drawQuestionLine(3, res.getString(R.string.last_treatment_concerned), y)
+        y = drawFreeAnswer(y + 20f, state.hair.currentConcerns)
 
         // 4) 요청/주의
         y += lineGap
-        drawQuestionLine(4, "시술시 요청사항과 주의 해야할 부분이 있나요?", y)
-        y = drawFreeAnswer(y, state.hair.precautions)
+        drawQuestionLine(4, res.getString(R.string.last_treatment_requested), y)
+        y = drawFreeAnswer(y + 20f, state.hair.precautions)
 
         // 5) 가장 중요시 여기는 부분
         y += lineGap
-        drawQuestionLine(5, "헤어스타일에서 가장 중요시 여기는 부분은?", y)
+        drawQuestionLine(5, res.getString(R.string.styling_level), y)
         val importantSet = toSetIgnoreCase(state.hair.stylingLevel)
         val impItems = listOf(
-            "자연건조" to ("NATURAL" in importantSet || "자연건조" in importantSet),
-            "드라이건조" to ("BLOW" in importantSet || "드라이건조" in importantSet),
-            "롤드라이" to ("ROLL" in importantSet || "롤드라이" in importantSet)
+            res.getString(R.string.most_important_hairstyle_option_natural) to
+                    ("NATURAL" in importantSet),
+
+            res.getString(R.string.most_important_hairstyle_option_dry) to
+                    ("BLOW" in importantSet),
+
+            res.getString(R.string.most_important_hairstyle_option_rolldry) to
+                    ("ROLL" in importantSet)
         )
-        y = drawChecksGrid(impItems, y + 22f, cols = 3)
+        y = drawChecksGrid(
+            items = impItems,
+            yStart = y + 12f,
+            colW = 220f,
+            rowH = 28f,
+            cols = 3
+        )
 
         // 6) 스타일링 레벨
         /*y += lineGap
@@ -241,57 +297,123 @@ object ReportRenderer {
 
         // 7) 평소 스타일/이미지
         y += lineGap
-        drawQuestionLine(7, "평소 내 스타일과 이미지를 선택해주세요. (최대 3개까지 선택)", y)
+        drawQuestionLine(7, res.getString(R.string.choose_usual_style_image), y)
         val usualSet = toSetIgnoreCase(state.hair.usualImage)
-        val usual = listOf(
-            "STANDARD" to "스탠다드", "SOFT" to "부드러운", "BOYISH" to "보이쉬한", "LIGHT" to "가벼운",
-            "CASUAL" to "캐주얼", "CUTE" to "귀여운", "PROFESSIONAL" to "프로페셔널한", "GLAM" to "화려한",
-            "TRENDY" to "트렌디", "NEAT" to "깔끔한", "UNIQUE" to "유니크", "SIMPLE" to "심플",
-            "MODERN" to "모던", "CHIC" to "시크한", "VINTAGE" to "빈티지한", "EFFORTLESS" to "꾸안꾸"
-        ).map { (key, labelKo) ->
-            labelKo to (key in usualSet || labelKo.uppercase(Locale.ROOT) in usualSet)
+
+        val usualItems = listOf(
+            "STANDARD" to R.string.style_standard,
+            "SOFT" to R.string.style_soft,
+            "BOYISH" to R.string.style_boyish,
+            "LIGHT" to R.string.style_light,
+            "CASUAL" to R.string.style_casual,
+            "CUTE" to R.string.style_cute,
+            "PROFESSIONAL" to R.string.style_pro,
+            "GLAM" to R.string.style_flashy,
+            "TRENDY" to R.string.style_trendy,
+            "NEAT" to R.string.style_clean,
+            "UNIQUE" to R.string.style_unique,
+            "SIMPLE" to R.string.style_simple,
+            "MODERN" to R.string.style_modern,
+            "CHIC" to R.string.style_chic,
+            "VINTAGE" to R.string.style_vintage,
+            "EFFORTLESS" to R.string.style_noeffort
+        )
+
+        val usual = usualItems.map { (key, resId) ->
+            res.getString(resId) to (key in usualSet)
         }
-        y = drawChecksGrid(usual, y + 22f, colW = 190f, cols = 4)
+
+// ★ 현재 리포트의 언어 확인
+        val lang = res.configuration.locales[0].language
+        val isJapanese = lang == "ja"
+
+// ★ 일본어면 3컬럼(더 넓게), 그 외에는 4컬럼
+        val usualCols = if (isJapanese) 3 else 4
+        val usualColW = if (isJapanese) 230f else 190f
+
+        y = drawChecksGrid(
+            items = usual,
+            yStart = y + 12f,
+            colW = usualColW,
+            rowH = 30f,
+            cols = usualCols
+        )
+
 
         // 8) (선호 이미지가 필요하면 동일 패턴으로 추가 가능)
 
         // 9) 레이어 정도
         y += lineGap
-        drawQuestionLine(8, "레이어 정도", y)
+        drawQuestionLine(8, res.getString(R.string.layer), y)
+
         val row9 = y + 22f
-        val manyLayer = state.hair.layerLevel.equals("MANY", true) || state.hair.layerLevel == "많이"
-        val lessLayer = state.hair.layerLevel.equals("LESS", true) || state.hair.layerLevel == "적게"
-        drawCheck(canvas, rightColX + 0f, row9, "많이", manyLayer, ansPaint)
-        drawCheck(canvas, rightColX + 100f, row9, "적게", lessLayer, ansPaint)
+
+        val layer = state.hair.layerLevel.uppercase(Locale.ROOT)
+        val isMany = layer == "MANY"
+        val isNormal = layer == "NORMAL"
+        val isLess = layer == "LESS"
+
+        drawCheck(canvas, rightColX + 10f, row9, res.getString(R.string.many), isMany, ansPaint)
+        drawCheck(
+            canvas,
+            rightColX + 140f,
+            row9,
+            res.getString(R.string.normal),
+            isNormal,
+            ansPaint
+        )
+        drawCheck(canvas, rightColX + 280f, row9, res.getString(R.string.less), isLess, ansPaint)
+
         y = row9
 
         // 10) 숱 정도
+        // 10) 숱 정도
         y += lineGap
-        drawQuestionLine(9, "숱 정도", y)
+        drawQuestionLine(9, res.getString(R.string.thick_layer), y)
+
         val row10 = y + 22f
-        val manyThin = state.hair.thinningLevel.equals("MANY", true) || state.hair.thinningLevel == "많이"
-        val lessThin = state.hair.thinningLevel.equals("LESS", true) || state.hair.thinningLevel == "적게"
-        drawCheck(canvas, rightColX + 0f, row10, "많이", manyThin, ansPaint)
-        drawCheck(canvas, rightColX + 100f, row10, "적게", lessThin, ansPaint)
+
+        val thin = state.hair.thinningLevel.uppercase(Locale.ROOT)
+        val thinMany = thin == "MANY"
+        val thinNormal = thin == "NORMAL"
+        val thinLess = thin == "LESS"
+
+        drawCheck(canvas, rightColX + 10f, row10, res.getString(R.string.many), thinMany, ansPaint)
+        drawCheck(
+            canvas,
+            rightColX + 140f,
+            row10,
+            res.getString(R.string.normal),
+            thinNormal,
+            ansPaint
+        )
+        drawCheck(canvas, rightColX + 280f, row10, res.getString(R.string.less), thinLess, ansPaint)
+
         y = row10
 
         // 11) 오늘 하고 싶은 디자인 (서술형)
         y += lineGap
-        drawQuestionLine(10, "오늘하고싶은 디자인", y)
+        drawQuestionLine(10, res.getString(R.string.today_want_today), y)
         y = drawFreeAnswer(y, state.hair.todayDesign)
 
         // 12) 얼굴형 아이콘 3x2
         y += lineGap
-        drawQuestionLine(11, "자신이 생각하는 얼굴형", y)
+        drawQuestionLine(11, res.getString(R.string.shape_your_face), y)
 
         val faces = listOf(
             R.drawable.face_oval, R.drawable.face_square, R.drawable.face_rectangle,
             R.drawable.face_diamond, R.drawable.face_heart, R.drawable.face_round
         )
         val selected = state.hair.faceShapeIndex
-        val cellW = 120f; val cellH = 140f; val gapX = 24f; val gapY = 24f
-        var fx = rightColX; var fy = y + 16f
-        val red = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.RED; style = Paint.Style.STROKE; strokeWidth = 3f }
+        val cellW = 120f;
+        val cellH = 140f;
+        val gapX = 24f;
+        val gapY = 24f
+        var fx = rightColX;
+        var fy = y + 16f
+        val red = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.RED; style = Paint.Style.STROKE; strokeWidth = 3f
+        }
 
         faces.forEachIndexed { i, resId ->
             val bm = BitmapFactory.decodeResource(res, resId)
@@ -300,7 +422,9 @@ object ReportRenderer {
             canvas.drawBitmap(bm, src, dst, null)
             if (selected == i) canvas.drawRoundRect(dst, 10f, 10f, red)
             fx += cellW + gapX
-            if ((i + 1) % 3 == 0) { fx = rightColX; fy += cellH + gapY }
+            if ((i + 1) % 3 == 0) {
+                fx = rightColX; fy += cellH + gapY
+            }
         }
 
         return bmp

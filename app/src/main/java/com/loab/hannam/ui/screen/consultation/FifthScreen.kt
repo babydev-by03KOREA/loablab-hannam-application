@@ -137,6 +137,18 @@ fun FifthScreen(
                     )
                 }
 
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.shape_your_face),
+                        style = MaterialTheme.typography.titleSmall,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
                 // 3x2 그리드
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(3),
